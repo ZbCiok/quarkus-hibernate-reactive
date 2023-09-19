@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table
-@NamedQuery(name = "Organizations.findAll", query = "SELECT c FROM Organization c ORDER BY c.name")
+@NamedQuery(name = "Organizations.findAll", query = "SELECT o FROM Organization o ORDER BY o.name")
 public class Organization {
 
     @Id
