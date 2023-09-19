@@ -50,6 +50,7 @@ public class ExampleResource {
     }
 
     @POST
+    @Path("/save")
     public Uni<Response> create(Organization organization) {
         if (organization == null || organization.getId() != null) {
             throw new WebApplicationException("Id was invalidly set on request.", 422);
@@ -60,7 +61,7 @@ public class ExampleResource {
     }
 
     @PUT
-    @Path("{id}")
+    @Path("/update/{id}")
     public Uni<Response> update(@RestPath Integer id, Organization organization) {
         if (organization == null || organization.getName() == null) {
             throw new WebApplicationException("Fruit name was not set on request.", 422);
@@ -77,7 +78,7 @@ public class ExampleResource {
     }
 
     @DELETE
-    @Path("{id}")
+    @Path("/delete/{id}")
     public Uni<Response> delete(@RestPath Integer id) {
         return sf.withTransaction((s, t) ->
                 s.find(Organization.class, id)
