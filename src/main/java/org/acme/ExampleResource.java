@@ -15,7 +15,7 @@ import java.util.List;
 import static jakarta.ws.rs.core.Response.Status.*;
 import org.jboss.logging.Logger;
 
-@Path("customers")
+@Path("organizations")
 @ApplicationScoped
 @Produces("application/json")
 @Consumes("application/json")
@@ -36,39 +36,39 @@ public class ExampleResource {
 
 
     @GET
-    public Uni<List<Customer>> get() {
+    public Uni<List<Organization>> get() {
         return sf.withTransaction((s, t) -> s
-                .createNamedQuery("Customers.findAll", Customer.class)
+                .createNamedQuery("Organizations.findAll", Organization.class)
                 .getResultList()
         );
     }
 
     @GET
     @Path("{id}")
-    public Uni<Customer> getSingle(@RestPath Integer id) {
-        return sf.withTransaction((s, t) -> s.find(Customer.class, id));
+    public Uni<Organization> getSingle(@RestPath Integer id) {
+        return sf.withTransaction((s, t) -> s.find(Organization.class, id));
     }
 
     @POST
-    public Uni<Response> create(Customer customer) {
-        if (customer == null || customer.getId() != null) {
+    public Uni<Response> create(Organization organization) {
+        if (organization == null || organization.getId() != null) {
             throw new WebApplicationException("Id was invalidly set on request.", 422);
         }
 
-        return sf.withTransaction((s, t) -> s.persist(customer))
-                .replaceWith(() -> Response.ok(customer).status(CREATED).build());
+        return sf.withTransaction((s, t) -> s.persist(organization))
+                .replaceWith(() -> Response.ok(organization).status(CREATED).build());
     }
 
     @PUT
     @Path("{id}")
-    public Uni<Response> update(@RestPath Integer id, Customer customer) {
-        if (customer == null || customer.getName() == null) {
+    public Uni<Response> update(@RestPath Integer id, Organization organization) {
+        if (organization == null || organization.getName() == null) {
             throw new WebApplicationException("Fruit name was not set on request.", 422);
         }
 
-        return sf.withTransaction((s, t) -> s.find(Customer.class, id)
+        return sf.withTransaction((s, t) -> s.find(Organization.class, id)
                 // If entity exists then update it
-                .onItem().ifNotNull().invoke(entity -> entity.setName(customer.getName()))
+                .onItem().ifNotNull().invoke(entity -> entity.setName(organization.getName()))
                 .onItem().ifNotNull().transform(entity -> Response.ok(entity).build())
                 // If entity not found return the appropriate response
                 .onItem().ifNull()
@@ -80,7 +80,7 @@ public class ExampleResource {
     @Path("{id}")
     public Uni<Response> delete(@RestPath Integer id) {
         return sf.withTransaction((s, t) ->
-                s.find(Customer.class, id)
+                s.find(Organization.class, id)
                         // If entity exists then delete it
                         .onItem().ifNotNull()
                         .transformToUni(entity -> s.remove(entity)

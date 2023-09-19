@@ -4,21 +4,21 @@ import jakarta.persistence.*;
 
 @Entity
 @Table
-@NamedQuery(name = "Customers.findAll", query = "SELECT c FROM Customer c ORDER BY c.name")
-public class Customer {
+@NamedQuery(name = "Organizations.findAll", query = "SELECT c FROM Organization c ORDER BY c.name")
+public class Organization {
 
     @Id
-    @SequenceGenerator(name = "customersSequence", sequenceName = "known_customers_id_seq", allocationSize = 1, initialValue = 10)
-    @GeneratedValue(generator = "customersSequence")
+    @SequenceGenerator(name = "organizationsSequence", sequenceName = "known_organizations_id_seq", allocationSize = 1, initialValue = 10)
+    @GeneratedValue(generator = "organizationsSequence")
     private Integer id;
 
     @Column()
     private String name;
 
-    public Customer() {
+    public Organization() {
     }
 
-    public Customer(String name) {
+    public Organization(String name) {
         this.name = name;
     }
 
