@@ -19,9 +19,9 @@ import org.jboss.logging.Logger;
 @ApplicationScoped
 @Produces("application/json")
 @Consumes("application/json")
-public class ExampleResource {
+public class OrganizationResource {
 
-    private static final Logger LOGGER = Logger.getLogger(ExampleResource.class);
+    private static final Logger LOGGER = Logger.getLogger(OrganizationResource.class);
 
     @Inject
     Mutiny.SessionFactory sf;
@@ -34,8 +34,8 @@ public class ExampleResource {
         return "Hello from RESTEasy Reactive";
     }
 
-
     @GET
+    @Path("/getAll")
     public Uni<List<Organization>> get() {
         return sf.withTransaction((s, t) -> s
                 .createNamedQuery("Organizations.findAll", Organization.class)
@@ -44,8 +44,9 @@ public class ExampleResource {
     }
 
     @GET
-    @Path("{id}")
+    @Path("/get/{id}")
     public Uni<Organization> getSingle(@RestPath Integer id) {
+        if ( id == null ) throw new IllegalArgumentException();
         return sf.withTransaction((s, t) -> s.find(Organization.class, id));
     }
 
